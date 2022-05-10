@@ -15,7 +15,15 @@ def get_speed(ox, oy, nx, ny, lane=0):
         meterspersecond = pixelspersecond / pixelspermeter
         # return kmph
         return round(meterspersecond * 3.6, 1)
-    return 0
+    else:    
+        return 0
+
+def resetlanespeed():
+    lanespeed[0] = 0
+    lanespeed[1] = 0
+    lanespeed[2] = 0
+    lanespeed[3] = 0
+    
 
 def warp(frame):
     height, width = frame.shape[:2]
@@ -37,8 +45,8 @@ video_file = "highway3.mp4"
 
 
 measurement_region = [
-    np.array([[ 10,  350], [ 10, 375], [ 46, 375], [ 46,  350]]),
-    np.array([[ 52,  350], [ 52, 375], [ 88, 375], [ 88,  350]]),
+    np.array([[10,  350], [10, 375], [46, 375], [46,  350]]),
+    np.array([[52,  350], [52, 375], [88, 375], [88,  350]]),
     np.array([[120,  350], [120, 375], [150, 375], [150,  350]]),
     np.array([[158,  350], [158, 375], [190, 375], [190,  350]])
     ]
@@ -91,6 +99,7 @@ while(1):
     if not ret:
         print('No frames grabbed!')
         break
+    frame_copy = frame.copy()
     
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     v = hsv[:,:,2]    
@@ -105,7 +114,7 @@ while(1):
     cv2.fillPoly(mask, [measurement_region[0]], (0,0,50))
     cv2.fillPoly(mask, [measurement_region[1]], (0,0,50))
     cv2.fillPoly(mask, [measurement_region[2]], (0,0,50))
-    
+    cv2.fillPoly(mask, [measurement_region[3]], (0,0,50))
 
     frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     warped_frame_gray, _ = warp(frame_gray)
@@ -128,20 +137,22 @@ while(1):
         a, b = new.ravel()
         c, d = old.ravel()
        
-        for i in range(4):
+        for i in range(len(lanespeed)):
             speed = get_speed(a, b, c, d, lane=i)
             if speed:
                 if speed > 1:
                     lanespeed[i] = speed
-            
+
+                        
 
         print("{:4} | {:4} | {:4} | {:4}"
           .format(lanespeed[0], lanespeed[1], lanespeed[2], lanespeed[3]))
-
+        
+        
         # mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), color[i].tolist(), 2)
         # mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), (0,255,0), 2)
-        warped = cv2.circle(warped, (int(a), int(b)), 5, (0,255,0), -1)
-        warped = cv2.circle(warped, (int(c), int(d)), 5, (0,0,255), -1)
+        # warped = cv2.circle(warped, (int(a), int(b)), 5, (0,255,0), -1)
+        # warped = cv2.circle(warped, (int(c), int(d)), 5, (0,0,255), -1)
     img = cv2.add(warped, mask)
     # img = frame
     cv2.imshow('frame', img)
@@ -156,6 +167,8 @@ while(1):
     key = cv2.waitKey(1)
     if key == ord("q"):
         break
+    
+    resetlanespeed()
     
     # Now update the previous frame and previous points
     warped_old_gray = warped_frame_gray.copy()
