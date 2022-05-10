@@ -60,6 +60,7 @@ lanemarkingpixel = 6.5
 pixelspermeter = lanemarkingpixel / 3.048
 fps = round(cap.get(cv2.CAP_PROP_FPS))
 print(f"FPS: {fps}")
+
 # params for ShiTomasi corner detection
 feature_params = dict( maxCorners = 100,
                        qualityLevel = 0.3,

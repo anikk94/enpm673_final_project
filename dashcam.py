@@ -11,7 +11,24 @@ video_file = "highway5.mp4"
 
 cap = cv2.VideoCapture(video_file)
 
+# params for ShiTomasi corner detection
+feature_params = dict( maxCorners = 100,
+                       qualityLevel = 0.3,
+                       minDistance = 20,
+                       blockSize = 3 )
 
+# Take first frame and find corners in it
+ret, old_frame = cap.read()
+old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
+p0 = cv2.goodFeaturesToTrack(old_gray, mask = None, **feature_params)
+
+
+# check corners
+for i in p0:
+    x, y = i.ravel()
+    old_frame = cv2.circle(old_frame, (int(x), int(y)), 5, (0, 0, 255), -1)
+cv2.imshow("old_frame",old_frame)
+cv2.waitKey(0)
 
 
 # Create a mask image for drawing purposes
