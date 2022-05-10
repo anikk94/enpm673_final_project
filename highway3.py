@@ -19,10 +19,8 @@ def get_speed(ox, oy, nx, ny, lane=0):
         return 0
 
 def resetlanespeed():
-    lanespeed[0] = 0
-    lanespeed[1] = 0
-    lanespeed[2] = 0
-    lanespeed[3] = 0
+    for i in range(len(lanespeed)):
+        lanespeed[i] = 0
     
 
 def warp(frame):
@@ -157,6 +155,8 @@ while(1):
     # img = frame
     cv2.imshow('frame', img)
 
+    
+
     cv2.putText(frame, 'Lane1: {:.0f} km/h'.format(lanespeed[0]), (225,700), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
     cv2.putText(frame, 'Lane2: {:.0f} km/h'.format(lanespeed[1]), (415,700), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
     cv2.putText(frame, 'Lane3: {:.0f} km/h'.format(lanespeed[2]), (760,700), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
@@ -164,7 +164,7 @@ while(1):
 
     cv2.imshow('original', frame)
 
-    key = cv2.waitKey(1)
+    key = cv2.waitKey(fps)
     if key == ord("q"):
         break
     

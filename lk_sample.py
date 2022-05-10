@@ -16,21 +16,12 @@ def get_speed(ox, oy, nx, ny, lane=0):
         return round(meterspersecond * 3.6, 1)
     return None
 
-# video_file = "highway1.mp4"
-video_file = "highway2.mp4"
-# video_file = "highway3.mp4"
-# video_file = "highway4.mp4"
-# video_file = "highway5.mp4"
+def resetlanespeed():
+    for i in range(len(lanespeed)):
+        lanespeed[i] = 0
 
-# region1= np.array([[770,  23], [770, 108], [838, 108], [838,  23]])
-# region2= np.array([[770, 160], [770, 209], [838, 209], [838, 160]])
-# region3= np.array([[770, 218], [770, 260], [838, 260], [838, 218]])
-# region4= np.array([[770, 268], [770, 310], [838, 310], [838, 268]])
-# region5= np.array([[770, 329], [770, 370], [838, 370], [838, 329]])
-# region6= np.array([[770, 379], [770, 418], [838, 418], [838, 379]])
-# region7= np.array([[770, 427], [770, 480], [838, 480], [838, 427]])
-# region8= np.array([[770, 544], [770, 611], [838, 611], [838, 544]])
-# region9= np.array([[770, 629], [770, 705], [838, 705], [838, 629]])
+
+video_file = "highway2.mp4"
 
 measurement_region = [
     np.array([[770,  23], [770, 108], [838, 108], [838,  23]]),
@@ -158,6 +149,8 @@ while(True):
     key = cv2.waitKey(fps)
     if key == ord("q"):
         break
+    
+    resetlanespeed()
     
     # Now update the previous frame and previous points
     old_gray = frame_gray.copy()
