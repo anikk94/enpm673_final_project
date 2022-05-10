@@ -49,6 +49,7 @@ measurement_region = [
     np.array([[158,  350], [158, 375], [190, 375], [190,  350]])
     ]
 
+
 lanespeed = [0, 0, 0, 0]
 
 cap = cv2.VideoCapture(video_file)
@@ -163,8 +164,14 @@ while(1):
     cv2.putText(frame, 'Lane3: {:.0f} km/h'.format(lanespeed[2]), (760,700), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
     cv2.putText(frame, 'Lane3: {:.0f} km/h'.format(lanespeed[3]), (960,700), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
 
+
     cv2.imshow('original', frame)
 
+    unwarped_mask = cv2.warpPerspective(mask, np.linalg.inv(matrix), (frame.shape[1],frame.shape[0]))
+
+    result = cv2.add(unwarped_mask,frame)
+
+    cv2.imshow('result', result)
     key = cv2.waitKey(fps)
     if key == ord("q"):
         break
