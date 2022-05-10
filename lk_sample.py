@@ -146,6 +146,7 @@ while(True):
     
     cv2.imshow('frame', img)
 
+
     key = cv2.waitKey(fps)
     if key == ord("q"):
         break
