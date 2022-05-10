@@ -28,6 +28,10 @@ def warp(frame):
     return warped, matrix
 
 
+def resetlanespeed():
+    for i in range(len(lanespeed)):
+        lanespeed[i] = 0
+
 video_file = "highway1.mp4"
 # video_file = "highway2.mp4"
 # video_file = "highway3.mp4"
@@ -154,6 +158,8 @@ while(1):
     key = cv2.waitKey(fps)
     if key == ord("q"):
         break
+    
+    resetlanespeed()
     
     # Now update the previous frame and previous points
     warped_old_gray = warped_frame_gray.copy()
