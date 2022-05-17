@@ -78,14 +78,7 @@ warped_old_gray, _ = warp(old_gray)
 
 height, width = old_frame.shape[:2]
 
-# check corners
-# for i in p0:
-#     x, y = i.ravel()
-#     old_frame = cv2.circle(roi_mask, (int(x), int(y)), 5, (0, 0, 255), -1)
-# cv2.imshow("old_frame",roi_mask)
-#     old_frame = cv2.circle(old_frame, (int(x), int(y)), 5, (0, 0, 255), -1)
-
-# Create a mask image for drawing purposes
+# Create a mask image to put visual indicators
 warped_old_frame, _ = warp(old_frame)
 mask = np.zeros_like(warped_old_frame)
 

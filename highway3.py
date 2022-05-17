@@ -34,13 +34,7 @@ def warp(frame):
     return warped, matrix
 
 
-# video_file = "highway1.mp4"
-# video_file = "highway2.mp4"
 video_file = "highway3.mp4"
-# video_file = "highway4.mp4"
-# video_file = "highway5.mp4"
-
-
 
 measurement_region = [
     np.array([[ 10,  350], [ 10, 375], [ 46, 375], [ 46,  350]]),
@@ -116,7 +110,6 @@ while(1):
     # recalculate good features
     if feature_refresh_counter % 20 == 0:
         p0 = cv2.goodFeaturesToTrack(warped_old_gray, mask=None, **feature_params)
-        # mask = np.zeros_like(old_frame)
 
 
     # calculate optical flow
@@ -127,7 +120,7 @@ while(1):
         good_new = p1[st==1]
         good_old = p0[st==1]
     
-    # draw the tracks
+    # calculate speed
     for i, (new, old) in enumerate(zip(good_new, good_old)):
         a, b = new.ravel()
         c, d = old.ravel()
@@ -144,7 +137,6 @@ while(1):
           .format(lanespeed[0], lanespeed[1], lanespeed[2], lanespeed[3]))
         
     img = cv2.add(warped, mask)
-    # img = frame
     cv2.imshow('frame', img)
 
     
@@ -162,8 +154,6 @@ while(1):
     result = cv2.add(unwarped_mask,frame)
 
     cv2.imshow('result', result)
-    # cv2.imshow('original', frame_copy)
-    # cv2.imshow('clahe', clahe_img)
     key = cv2.waitKey(fps)
     if key == ord("q"):
         break
