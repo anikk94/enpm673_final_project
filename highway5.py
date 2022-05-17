@@ -36,7 +36,8 @@ def warp(frame):
     return warped, matrix
 
 measurement_region = [
-    np.array([[ 10,  309], [ 10, 383] ,[ 195, 309], [ 195,  383]])]
+    np.array([[ 10,  309], [ 10, 383] ,[ 195, 309], [ 195,  383]]),
+    np.array([[ 10,  309] ,[ 195, 309], [ 195,  383], [ 10, 383]])]
 
 lanespeed = [0]
 
@@ -98,15 +99,10 @@ while(1):
     warped_bgr_frame, _ = warp(frame)
 
     # speed cam regions
-    cv2.fillPoly(mask, [measurement_region[0]], (0,0,50))
+    cv2.fillPoly(mask, [measurement_region[1]], (0,0,50))
 
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     warped_gray_frame, _ = warp(gray_frame)
-    # cv2.imshow('unwarped', gray_frame)
-    # cv2.imshow('warped', warped_gray_frame)
-    # # _, threshframe = cv2.threshold(gray_frame, 210, 255, cv2.THRESH_BINARY)
-    # # graythresh = threshframe
-    # # print(threshframe[600])
 
     # recalculate good features
     if feature_refresh_counter % 20 == 0:
@@ -134,7 +130,6 @@ while(1):
                 lanespeed[0] = speed
 
         print("{:4}".format(lanespeed[0]))
-        # print(a, b, "   \t   \t", c, d)
         mask = cv2.circle(mask, (int(a), int(b)), 5, (0,255,0), -1)
         mask = cv2.circle(mask, (int(c), int(d)), 5, (0,0,255), -1)
     img = cv2.add(warped_bgr_frame, mask)
@@ -142,7 +137,7 @@ while(1):
     
     cv2.imshow('frame', img)
 
-    key = cv2.waitKey(0)
+    key = cv2.waitKey(fps)
     if key == ord("q"):
         break
     
