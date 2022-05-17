@@ -95,12 +95,14 @@ while(1):
         print('No frames grabbed!')
         break
     
+    frame_copy = frame.copy()
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     v = hsv[:,:,2]    
     clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(20,20))
     cl1 = clahe.apply(v)
     hsv[:,:,2] = cl1
     frame = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+    clahe_img = frame.copy()
     
     warped, matrix = warp(frame)
 
@@ -147,18 +149,20 @@ while(1):
         warped = cv2.circle(warped, (int(c), int(d)), 5, (0,0,255), -1)
     img = cv2.add(warped, mask)
     # img = frame
-    cv2.imshow('frame', img)
+    cv2.imshow('img', img)
 
     cv2.putText(frame, 'Lane1: {:.0f} km/h'.format(lanespeed[0]), (375,650), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
     cv2.putText(frame, 'Lane2: {:.0f} km/h'.format(lanespeed[1]), (705,650), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
     cv2.putText(frame, 'Lane3: {:.0f} km/h'.format(lanespeed[2]), (975,650), cv2.FONT_HERSHEY_DUPLEX, 0.5, (0,255,0), 2)    
 
-    cv2.imshow('original', frame)
+    # cv2.imshow('frame', frame)
     unwarped_mask = cv2.warpPerspective(mask, np.linalg.inv(matrix), (frame.shape[1],frame.shape[0]))
 
     result = cv2.add(unwarped_mask,frame)
 
     cv2.imshow('result', result)
+    # cv2.imshow('original', frame_copy)
+    # cv2.imshow('clahe', clahe_img)
 
     key = cv2.waitKey(fps)
     if key == ord("q"):
