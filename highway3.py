@@ -80,14 +80,8 @@ warped_old_gray, _ = warp(old_gray)
 
 height, width = old_frame.shape[:2]
 
-# check corners
-# for i in p0:
-#     x, y = i.ravel()
-#     old_frame = cv2.circle(old_frame, (int(x), int(y)), 5, (0, 0, 255), -1)
-# cv2.imshow("old_frame",old_frame)
-# cv2.waitKey(0)
 
-# Create a mask image for drawing purposes
+# Create a mask image to put visual indicators
 warped_old_frame, _ = warp(old_frame)
 mask = np.zeros_like(warped_old_frame)
 
@@ -148,11 +142,6 @@ while(1):
         print("{:4} | {:4} | {:4} | {:4}"
           .format(lanespeed[0], lanespeed[1], lanespeed[2], lanespeed[3]))
         
-        
-        # mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), color[i].tolist(), 2)
-        # mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), (0,255,0), 2)
-        # warped = cv2.circle(warped, (int(a), int(b)), 5, (0,255,0), -1)
-        # warped = cv2.circle(warped, (int(c), int(d)), 5, (0,0,255), -1)
     img = cv2.add(warped, mask)
     # img = frame
     cv2.imshow('frame', img)
